@@ -1,0 +1,728 @@
+{
+  "info": {
+    "name": "Synapse AI API",
+    "description": "AI-powered educational platform using Gemini API",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"verification_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/verify-email",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "verify-email"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Topics",
+      "item": [
+        {
+          "name": "Create Topic Explanation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Machine Learning Basics\",\n  \"description\": \"Introduction to machine learning concepts\",\n  \"content\": \"Explain machine learning, its types, and basic algorithms\",\n  \"customizations\": {\n    \"level\": \"beginner\",\n    \"includeCalculations\": false,\n    \"includePracticeQuestions\": true,\n    \"includeExamples\": true,\n    \"includeApplications\": true,\n    \"focusAreas\": [\"supervised learning\", \"unsupervised learning\"],\n    \"additionalRequirements\": \"Include real-world examples\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/topics",
+              "host": ["{{base_url}}"],
+              "path": ["topics"]
+            }
+          }
+        },
+        {
+          "name": "Get Topics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/topics?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["topics"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Topic by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/topics/{{topic_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["topics", "{{topic_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Topic",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Machine Learning\",\n  \"customizations\": {\n    \"level\": \"expert\",\n    \"includeCalculations\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/topics/{{topic_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["topics", "{{topic_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Topic",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/topics/{{topic_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["topics", "{{topic_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "prompt",
+                  "value": "Please summarize this document and provide key insights.",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/documents/upload",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "upload"]
+            }
+          }
+        },
+        {
+          "name": "Get Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["documents"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Document by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Ask Question about Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What are the main conclusions of this document?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}/ask",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}", "ask"]
+            }
+          }
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "{{document_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "Generate Quiz from Topic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": {\n    \"numberOfQuestions\": 10,\n    \"difficulty\": \"medium\",\n    \"includeCalculations\": false,\n    \"timeLimit\": 30\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/quizzes/from-topic/{{topic_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "from-topic", "{{topic_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Generate Quiz from Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": {\n    \"numberOfQuestions\": 15,\n    \"difficulty\": \"hard\",\n    \"includeCalculations\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/quizzes/from-document/{{document_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "from-document", "{{document_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Generate Quiz from Website",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": {\n    \"numberOfQuestions\": 8,\n    \"difficulty\": \"mixed\",\n    \"includeCalculations\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/quizzes/from-website/{{website_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "from-website", "{{website_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Quizzes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quizzes?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Quiz by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quizzes/{{quiz_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "{{quiz_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Start Quiz Attempt",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quizzes/{{quiz_id}}/start",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "{{quiz_id}}", "start"]
+            }
+          }
+        },
+        {
+          "name": "Submit Quiz Attempt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [\n    {\n      \"questionIndex\": 0,\n      \"selectedOption\": 2,\n      \"timeSpent\": 45\n    },\n    {\n      \"questionIndex\": 1,\n      \"selectedOption\": 0,\n      \"timeSpent\": 30\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/quizzes/{{quiz_id}}/submit",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "{{quiz_id}}", "submit"]
+            }
+          }
+        },
+        {
+          "name": "Get Quiz Attempts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quizzes/{{quiz_id}}/attempts",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "{{quiz_id}}", "attempts"]
+            }
+          }
+        },
+        {
+          "name": "Delete Quiz",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/quizzes/{{quiz_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["quizzes", "{{quiz_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chats",
+      "item": [
+        {
+          "name": "Get Chats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["chats"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Chat by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/{{chat_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "{{chat_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Send Message to Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Can you explain this concept in more detail?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chats/{{chat_id}}/message",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "{{chat_id}}", "message"]
+            }
+          }
+        },
+        {
+          "name": "Create New Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"General Discussion\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chats/new",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "new"]
+            }
+          }
+        },
+        {
+          "name": "Update Chat Title",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Chat Title\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chats/{{chat_id}}/title",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "{{chat_id}}", "title"]
+            }
+          }
+        },
+        {
+          "name": "Delete Chat",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/{{chat_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "{{chat_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Clear Chat Messages",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/{{chat_id}}/messages",
+              "host": ["{{base_url}}"],
+              "path": ["chats", "{{chat_id}}", "messages"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Websites",
+      "item": [
+        {
+          "name": "Process Website",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://example.com\",\n  \"prompt\": \"Please analyze this website and provide key insights about its content.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/websites/process",
+              "host": ["{{base_url}}"],
+              "path": ["websites", "process"]
+            }
+          }
+        },
+        {
+          "name": "Get Websites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/websites?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["websites"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Website by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/websites/{{website_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["websites", "{{website_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Ask Question about Website",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What are the main topics covered on this website?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/websites/{{website_id}}/ask",
+              "host": ["{{base_url}}"],
+              "path": ["websites", "{{website_id}}", "ask"]
+            }
+          }
+        },
+        {
+          "name": "Delete Website",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/websites/{{website_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["websites", "{{website_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ]
+}
