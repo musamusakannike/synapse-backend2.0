@@ -39,4 +39,10 @@ class Validators {
     return [
       body('customizations.level')
         .optional()
-        .isIn(['beginner', 'intermediate', 'advanced\'])
+        .isIn(['beginner', 'intermediate', 'advanced'])
+        .withMessage('Level must be one of the following: beginner, intermediate, advanced')
+    ];
+  }
+}
+
+module.exports = Validators
