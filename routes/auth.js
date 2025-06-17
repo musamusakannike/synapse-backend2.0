@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
 const { body, validationResult } = require("express-validator")
 const User = require("../models/User")
-const emailService = require("../services/emailService")
+const EmailService = require("../services/emailService")
 const auth = require("../middleware/auth")
 
 const router = express.Router()
+const emailService = new EmailService()
 
 // Register
 router.post(
